@@ -11,6 +11,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  TextEditingController searchController = new TextEditingController();
   @override
   Widget build(BuildContext context) {
     var dish_name = ["Poha", "Ras Gulla", "Dhokla", "Wada Paw", "Manchuriyan"];
@@ -32,32 +33,42 @@ class _HomeState extends State<Home> {
 
           // Search Bar Code 🔎🔎🔎
 
-          SafeArea(
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-              // color: Colors.white,
-              height: 50,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(24)),
-              child: Column(
-                children: <Widget>[
-                  Row(
-                    children: [
+          Column(
+            children: [
+              SafeArea(
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 8),
+                  margin: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+                  // color: Colors.white,
+
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(24)),
+                  child: Row(
+                    children: <Widget>[
                       GestureDetector(
-                          onTap: () {
-                            print("Search Me");
-                          },
-                          child: Container(
-                            child: Icon(
-                              Icons.search,
-                              color: Colors.grey,
-                            ),
-                            margin: EdgeInsets.fromLTRB(3, 0, 7, 0),
-                          )),
+                        onTap: () {
+                          if ((searchController.text).replaceAll(" ", "") ==
+                              "") {
+                            print("Blank search");
+                          } else {
+                            Navigator.pushReplacementNamed(context, "/loading",
+                                arguments: {
+                                  "searchText": searchController.text,
+                                });
+                          }
+                        },
+                        child: Container(
+                          child: Icon(
+                            Icons.search,
+                            color: Colors.grey,
+                          ),
+                          margin: EdgeInsets.fromLTRB(3, 0, 7, 0),
+                        ),
+                      ),
                       Expanded(
                         child: TextField(
+                          controller: searchController,
                           decoration: InputDecoration(
                               hintText: 'Seach $dish',
                               border: InputBorder.none),
@@ -66,10 +77,29 @@ class _HomeState extends State<Home> {
                       ),
                     ],
                   ),
-                ],
+                ),
+                // Search Bar Ended 🔍🔍🔍
               ),
-            ),
-            // Search Bar Ended 🔍🔍🔍
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "WHAT DO YOU WANT TO COOK TODAY?",
+                      style: TextStyle(fontSize: 33, color: Colors.white),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      "Let's Cook Something New!",
+                      style: TextStyle(fontSize: 20, color: Colors.white),
+                    )
+                  ],
+                ),
+              ),
+            ],
           ),
         ],
       ),
