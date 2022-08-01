@@ -1,7 +1,9 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -12,6 +14,23 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   TextEditingController searchController = new TextEditingController();
+
+  void getRecepie(String query) async {
+    String url =
+        "https://api.edamam.com/search?q=$query&app_id=f30f4973&app_key=cee0238ac891c32bf29fe44eb43f84db";
+    var response = await http.get(Uri.parse(url));
+    Map data = jsonDecode(response.body);
+    print(data);
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+
+    super.initState();
+    getRecepie("biryani");
+  }
+
   @override
   Widget build(BuildContext context) {
     var dish_name = ["Poha", "Ras Gulla", "Dhokla", "Wada Paw", "Manchuriyan"];
@@ -24,6 +43,7 @@ class _HomeState extends State<Home> {
           Container(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
+
             // Using Gradient Color Combination 💢
             decoration: BoxDecoration(
                 gradient: LinearGradient(
@@ -52,16 +72,13 @@ class _HomeState extends State<Home> {
                               "") {
                             print("Blank search");
                           } else {
-                            Navigator.pushReplacementNamed(context, "/loading",
-                                arguments: {
-                                  "searchText": searchController.text,
-                                });
+                            getRecepie(searchController.text);
                           }
                         },
                         child: Container(
                           child: Icon(
                             Icons.search,
-                            color: Colors.grey,
+                            color: Colors.blue,
                           ),
                           margin: EdgeInsets.fromLTRB(3, 0, 7, 0),
                         ),
@@ -106,3 +123,5 @@ class _HomeState extends State<Home> {
     );
   }
 }
+
+// https://api.edamam.com/search?q=chicken&app_id=${YOUR_APP_ID}&app_key=${YOUR_APP_KEY}&from=0&to=3&calories=591-722&health=alcohol-free
