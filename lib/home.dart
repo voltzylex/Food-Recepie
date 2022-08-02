@@ -1,8 +1,9 @@
 // ignore_for_file: prefer_const_constructors
-
+import 'dart:developer' as dev;
 import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:food_recepie/models.dart';
 import 'package:http/http.dart' as http;
 
 class Home extends StatefulWidget {
@@ -15,12 +16,24 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   TextEditingController searchController = new TextEditingController();
 
+  List<RecepieModel> recepieList = <
+      RecepieModel>[]; //Creating a List for {Array} Recepie calling And Storing  for APi
+
   void getRecepie(String query) async {
     String url =
         "https://api.edamam.com/search?q=$query&app_id=f30f4973&app_key=cee0238ac891c32bf29fe44eb43f84db";
     var response = await http.get(Uri.parse(url));
     Map data = jsonDecode(response.body);
-    print(data);
+    data["hits"].forEach((element) {
+      RecepieModel recepieModel = new RecepieModel();
+      recepieModel = RecepieModel.fromMap(element["recipe"]);
+      recepieList.add(recepieModel);
+      // dev.log(recepieList.toString());
+    });
+
+    recepieList.forEach((Recepie) {
+      print(Recepie.appLabel);
+    });
   }
 
   @override
@@ -28,7 +41,7 @@ class _HomeState extends State<Home> {
     // TODO: implement initState
 
     super.initState();
-    getRecepie("biryani");
+    getRecepie("Dhokla");
   }
 
   @override
