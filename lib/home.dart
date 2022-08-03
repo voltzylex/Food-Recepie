@@ -1,5 +1,5 @@
 // ignore_for_file: prefer_const_constructors
-import 'dart:developer' as dev;
+
 import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
@@ -66,70 +66,81 @@ class _HomeState extends State<Home> {
 
           // Search Bar Code 🔎🔎🔎
 
-          Column(
-            children: [
-              SafeArea(
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8),
-                  margin: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-                  // color: Colors.white,
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                SafeArea(
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    margin: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+                    // color: Colors.white,
 
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(24)),
-                  child: Row(
-                    children: <Widget>[
-                      GestureDetector(
-                        onTap: () {
-                          if ((searchController.text).replaceAll(" ", "") ==
-                              "") {
-                            print("Blank search");
-                          } else {
-                            getRecepie(searchController.text);
-                          }
-                        },
-                        child: Container(
-                          child: Icon(
-                            Icons.search,
-                            color: Colors.blue,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(24)),
+                    child: Row(
+                      children: <Widget>[
+                        GestureDetector(
+                          onTap: () {
+                            if ((searchController.text).replaceAll(" ", "") ==
+                                "") {
+                              print("Blank search");
+                            } else {
+                              getRecepie(searchController.text);
+                            }
+                          },
+                          child: Container(
+                            child: Icon(
+                              Icons.search,
+                              color: Colors.blue,
+                            ),
+                            margin: EdgeInsets.fromLTRB(3, 0, 7, 0),
                           ),
-                          margin: EdgeInsets.fromLTRB(3, 0, 7, 0),
                         ),
+                        Expanded(
+                          child: TextField(
+                            controller: searchController,
+                            decoration: InputDecoration(
+                                hintText: 'Seach $dish',
+                                border: InputBorder.none),
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  // Search Bar Ended 🔍🔍🔍
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "WHAT DO YOU WANT TO COOK TODAY?",
+                        style: TextStyle(fontSize: 33, color: Colors.white),
                       ),
-                      Expanded(
-                        child: TextField(
-                          controller: searchController,
-                          decoration: InputDecoration(
-                              hintText: 'Seach $dish',
-                              border: InputBorder.none),
-                          style: TextStyle(color: Colors.grey),
-                        ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        "Let's Cook Something New!",
+                        style: TextStyle(fontSize: 20, color: Colors.white),
+                      ),
+                      Container(
+                        child: ListView.builder(
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: 2000,
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) {
+                              return SushilName();
+                            }),
                       ),
                     ],
                   ),
                 ),
-                // Search Bar Ended 🔍🔍🔍
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "WHAT DO YOU WANT TO COOK TODAY?",
-                      style: TextStyle(fontSize: 33, color: Colors.white),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      "Let's Cook Something New!",
-                      style: TextStyle(fontSize: 20, color: Colors.white),
-                    )
-                  ],
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),
@@ -137,4 +148,7 @@ class _HomeState extends State<Home> {
   }
 }
 
+Widget SushilName() {
+  return Text("Sushil Kumar", style: TextStyle(color: Colors.white));
+}
 // https://api.edamam.com/search?q=chicken&app_id=${YOUR_APP_ID}&app_key=${YOUR_APP_KEY}&from=0&to=3&calories=591-722&health=alcohol-free
